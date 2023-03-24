@@ -339,7 +339,7 @@ class YoutubePlayerController implements YoutubePlayerIFrameAPI {
     YoutubeMetaData? metaData,
   }) {
     if (_isClosing) {
-      print('YoutubePlayerController: update is called while closing!!!');
+      // print('YoutubePlayerController: update is called while closing!!!');
       return;
     }
     final updatedValue = YoutubePlayerValue(

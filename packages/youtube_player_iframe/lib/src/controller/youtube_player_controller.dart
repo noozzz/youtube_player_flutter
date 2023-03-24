@@ -326,6 +326,8 @@ class YoutubePlayerController implements YoutubePlayerIFrameAPI {
   /// MetaData for the currently loaded or cued video.
   YoutubeMetaData get metadata => _value.metaData;
 
+  bool _isClosing = false;
+
   /// Creates new [YoutubePlayerValue] with assigned parameters and overrides
   /// the old one.
   void update({
@@ -336,6 +338,10 @@ class YoutubePlayerController implements YoutubePlayerIFrameAPI {
     YoutubeError? error,
     YoutubeMetaData? metaData,
   }) {
+    if (_isClosing) {
+      print('YoutubePlayerController: update is called while closing!!!');
+      return;
+    }
     final updatedValue = YoutubePlayerValue(
       fullScreenOption: fullScreenOption ?? value.fullScreenOption,
       playerState: playerState ?? value.playerState,
@@ -667,6 +673,7 @@ class YoutubePlayerController implements YoutubePlayerIFrameAPI {
 
   /// Disposes the resources created by [YoutubePlayerController].
   Future<void> close() async {
+    _isClosing = true;
     await stopVideo();
     await webViewController.removeJavaScriptChannel(_youtubeJSChannelName);
     await _eventHandler.videoStateController.close();
